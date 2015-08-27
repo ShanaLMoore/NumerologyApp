@@ -15,7 +15,7 @@ def get_birth_path_num(birthdate)
 end
 
 def get_message(birth_path_num)
-  case birth_path_num
+  case @birth_path_num
   when 1
     message = "Your numerology number is #{birth_path_num}.\nOne is the leader. The number one indicates the ability to stand alone, and is a strong vibration. Ruled by the Sun."
   when 2
@@ -39,20 +39,21 @@ def get_message(birth_path_num)
   end
 end
 
-get '/:birthdate' do
-	birthdate = params[:birthdate]
-	birth_path_num = get_birth_path_num(birthdate)
-	@message = get_message(birth_path_num)
+def setup_index_view
+birthdate = params[:birthdate]
+  @birth_path_num = get_birth_path_num(birthdate)
+  @message = get_message(birth_path_num)
   erb :index
+end
+
+post '/' do
+ setup_index_view
 end
 
 get '/' do
     erb :form
 end
 
-post '/' do
-  birthdate = params[:birthdate]
-  birth_path_num = get_birth_path_num(birthdate)
-  @message = get_message(birth_path_num)
-  erb :index
+get '/:birthdate' do
+ setup_index_view
 end
